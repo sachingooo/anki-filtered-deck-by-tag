@@ -6,7 +6,7 @@ An Anki add-on that creates a filtered deck from the browser sidebar. Used for s
 2. Select "Create Filtered Deck" from the right-click menu. A filtered deck will be created from the tag you right clicked on. 
 
 ## Configuration
-Configuration options can be found in the add-on config, accessible from Tools --> Add-ons --> Select the add-on --> Config. 
+Configuration options can be found in the add-on config, accessible from Tools → Add-ons → Select the add-on → Config. 
 * By default, there is search text that is added to the end of the filtered deck search (is:due OR is:new) so that studying the tag pulls all new or due cards - this replicates studying by deck most closely. To modify this search text that's added, change the value of the `supplementalSearchText` variable in the config. 
 * By default, there is a limit of 300 cards that are added to the deck. I chose this because it's sufficiently high that I'd never personally want to study a deck that large without breaking it up. If you'd like to change the limit of the number of cards pulled into the filtered deck, modify the `numCards` in the config. 
 
