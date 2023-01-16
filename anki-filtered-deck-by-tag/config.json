@@ -1,4 +1,5 @@
 {
 	"supplementalSearchText": "(is:due OR is:new)",
-	"numCards": 300
+	"numCards": 300,
+	"unsuspendAutomatically": true
 }
