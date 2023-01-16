@@ -57,6 +57,9 @@ def _createFilteredDeck(item: SidebarItem):
             search += " " + config["supplementalSearchText"]
         if config["numCards"] > 0:
             numberCards = config["numCards"]
+        if config["unsuspendAutomatically"]:
+            cidsToUnsuspend = col.find_cards(search)
+            col.sched.unsuspend_cards(cidsToUnsuspend)
 
     mw.progress.start()
     did = col.decks.new_filtered(deckName)
