@@ -6,6 +6,13 @@ An Anki add-on that creates a filtered deck from the browser sidebar. Used for s
 2. Select "Create Filtered Deck" from the right-click menu. A filtered deck will be created from the tag you right clicked on.
 3. Modify your searches in the config! See below for the config that I use. 
 
+Right click menu:
+
+![image](https://user-images.githubusercontent.com/62180448/218291471-142ebd77-2fa2-4f2d-84dc-cf9b0ff342ca.png)
+
+
+
+
 ## Configuration
 Configuration options can be found in the add-on config, accessible from Tools → Add-ons → Select the add-on → Config. This addon will create a filtered deck from the tag you right clicked on, and appends supplemental search text to that search text (based on what you configure). Multiple configuration options are permitted. 
 * There is an array named `supplementalSearchTexts`, which is an array of strings. For each string that you add, a new option will be added in the right click menu on the browse screen for tags, corresponding to that string. 
@@ -14,7 +21,9 @@ Configuration options can be found in the add-on config, accessible from Tools �
 * The addon automatically unsuspends cards that should belong in the deck. To disable this, mark the `unsuspendAutomatically` configuration option as false.
 
 As an example, here's what I use in my config:
-`{
+
+```
+{
 	"numCards": 9999,
 	"shortNames": [
 		"high yield due",
@@ -28,7 +37,7 @@ As an example, here's what I use in my config:
 	],
 	"unsuspendAutomatically": true
 }
-`
+```
 
 ## Notes
 * This add-on <i>creates</i> the filtered deck. It does not regularly <i>rebuild</i> that filtered deck. For that, I recommend one of the rebuild all add-ons. 
