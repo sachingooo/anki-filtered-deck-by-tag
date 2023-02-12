@@ -1,5 +1,6 @@
 {
-	"supplementalSearchText": "(is:due OR is:new)",
+	"supplementalSearchTexts": [],
+	"shortNames": [],
 	"numCards": 300,
 	"unsuspendAutomatically": true
 }

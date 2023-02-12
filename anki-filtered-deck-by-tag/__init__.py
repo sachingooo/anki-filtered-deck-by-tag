@@ -28,18 +28,26 @@ if TYPE_CHECKING:
     from aqt.browser import SidebarTreeView  # type: ignore
 
 config = mw.addonManager.getConfig(__name__)
+assert len(config["supplementalSearchTexts"]) == len(config["shortNames"]
+                                                     ), "Length of supplementalSearchTexts and shortNames are not the same in Filtered Deck From Tag addon configuration."
 
 
 def _filteredDeckFromTag(sidebar: "SidebarTreeView",  menu: QMenu, item: SidebarItem, index: QModelIndex):
-
     # Adds our option to the right click menu for tags in the deck browser
     if item.item_type == SidebarItemType.TAG:
         menu.addSeparator()
-        menu.addAction("Create Filtered Deck",
-                       lambda: _createFilteredDeck(item))
+        if len(config["supplementalSearchTexts"]) == 0:
+            menu.addAction("Create Filtered Deck",
+                           lambda: _createFilteredDeck(item, ""))
+        else:
+            for i in range(len(config["supplementalSearchTexts"])):
+                supplementalSearchText = config["supplementalSearchTexts"][i]
+                shortName = config["shortNames"][i]
+                menu.addAction("Create Filtered Deck - %s" % shortName,
+                               lambda sst=supplementalSearchText, sn=shortName: _createFilteredDeck(item, sst, sn))
 
 
-def _createFilteredDeck(item: SidebarItem):
+def _createFilteredDeck(item: SidebarItem, supplementalSearchText, shortName):
     if not item.full_name or len(item.full_name) < 2:
         return
 
@@ -48,13 +56,14 @@ def _createFilteredDeck(item: SidebarItem):
         raise Exception('collection is not available')
 
     search = col.build_search_string(SearchNode(tag=item.full_name))
+    search += " " + supplementalSearchText
     deckName = _formatDeckNameFromTag(item.name)
+    if len(shortName) > 0:
+        deckName += " - %s" % shortName
     numberCards = 300
 
     # modifications based on config
     if config:
-        if config["supplementalSearchText"]:
-            search += " " + config["supplementalSearchText"]
         if config["numCards"] > 0:
             numberCards = config["numCards"]
         if config["unsuspendAutomatically"]:
