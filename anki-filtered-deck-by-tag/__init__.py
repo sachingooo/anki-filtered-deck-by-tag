@@ -27,11 +27,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from aqt.browser import SidebarTreeView  # type: ignore
 
-config = mw.addonManager.getConfig(__name__)
-assert len(config["supplementalSearchTexts"]) == len(config["shortNames"]
-                                                     ), "Length of supplementalSearchTexts and shortNames are not the same in Filtered Deck From Tag addon configuration."
-
-
 def _filteredDeckFromTag(sidebar: "SidebarTreeView",  menu: QMenu, item: SidebarItem, index: QModelIndex):
     # Adds our option to the right click menu for tags in the deck browser
     if item.item_type == SidebarItemType.TAG:
@@ -43,8 +38,11 @@ def _filteredDeckFromTag(sidebar: "SidebarTreeView",  menu: QMenu, item: Sidebar
             for i in range(len(config["supplementalSearchTexts"])):
                 supplementalSearchText = config["supplementalSearchTexts"][i]
                 shortName = config["shortNames"][i]
-                menu.addAction("Create Filtered Deck - %s" % shortName,
-                               lambda sst=supplementalSearchText, sn=shortName: _createFilteredDeck(item, sst, sn))
+                caption = "Create Filtered Deck"
+                if shortName != "":
+                    caption += " - %s" % shortName
+                
+                menu.addAction(caption, lambda sst=supplementalSearchText, sn=shortName: _createFilteredDeck(item, sst, sn))
 
 
 def _createFilteredDeck(item: SidebarItem, supplementalSearchText, shortName):
@@ -80,7 +78,6 @@ def _createFilteredDeck(item: SidebarItem, supplementalSearchText, shortName):
     mw.reset()
     tooltip("Created filtered deck from tag %s " % (item.name))
 
-
 def _formatDeckNameFromTag(tagName: str):
     # Make the deck name readable
     pieces = tagName.split("_")
@@ -91,6 +88,21 @@ def _formatDeckNameFromTag(tagName: str):
 
     return " ".join(pieces)
 
+def updateLegacyConfig():
+    config = mw.addonManager.getConfig(__name__)
+    updatedConfig = config.copy()
+    if "supplementalSearchText" in config and "supplementalSearchTexts" not in config: #haven't done the update on this config yet
+        updatedConfig["supplementalSearchTexts"] = [config["supplementalSearchText"]]
+        del updatedConfig["supplementalSearchText"]
+        tooltip(str(updatedConfig))
+        updatedConfig["shortNames"] = [""]
+        mw.addonManager.writeConfig(__name__, {})
+        mw.addonManager.writeConfig(__name__, updatedConfig)
+
+    return updatedConfig
+
+config = updateLegacyConfig()
+assert len(config["supplementalSearchTexts"]) == len(config["shortNames"]), "Length of supplementalSearchTexts and shortNames are not the same in Filtered Deck From Tag addon configuration."
 
 # Append our option to the context menu
 browser_sidebar_will_show_context_menu.append(_filteredDeckFromTag)
