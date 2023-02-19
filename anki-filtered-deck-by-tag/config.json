@@ -2,5 +2,6 @@
 	"supplementalSearchTexts": [],
 	"shortNames": [],
 	"numCards": 9999,
-	"unsuspendAutomatically": true
+	"unsuspendAutomatically": true,
+	"defaultOrder": 6
 }

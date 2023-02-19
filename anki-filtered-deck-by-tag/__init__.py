@@ -21,6 +21,7 @@ from aqt.utils import tooltip
 from anki.collection import SearchNode
 from aqt.browser import SidebarItem, SidebarTreeView, SidebarItemType
 from aqt.gui_hooks import browser_sidebar_will_show_context_menu
+from anki.consts import DYN_OLDEST, DYN_RANDOM, DYN_SMALLINT, DYN_BIGINT, DYN_LAPSES, DYN_ADDED, DYN_DUE, DYN_REVADDED, DYN_DUEPRIORITY
 
 from typing import TYPE_CHECKING
 
@@ -33,7 +34,7 @@ def _filteredDeckFromTag(sidebar: "SidebarTreeView",  menu: QMenu, item: Sidebar
         menu.addSeparator()
         if len(config["supplementalSearchTexts"]) == 0:
             menu.addAction("Create Filtered Deck",
-                           lambda: _createFilteredDeck(item, ""))
+                           lambda: _createFilteredDeck(item, "", ""))
         else:
             for i in range(len(config["supplementalSearchTexts"])):
                 supplementalSearchText = config["supplementalSearchTexts"][i]
@@ -68,10 +69,14 @@ def _createFilteredDeck(item: SidebarItem, supplementalSearchText, shortName):
             cidsToUnsuspend = col.find_cards(search)
             col.sched.unsuspend_cards(cidsToUnsuspend)
 
+    defaultOrder = config["defaultOrder"]
+    if defaultOrder not in [DYN_OLDEST, DYN_RANDOM, DYN_SMALLINT, DYN_BIGINT, DYN_LAPSES, DYN_ADDED, DYN_DUE, DYN_REVADDED, DYN_DUEPRIORITY]:
+        defaultOrder = DYN_DUE
+    
     mw.progress.start()
     did = col.decks.new_filtered(deckName)
     deck = col.decks.get(did)
-    deck["terms"] = [[search, numberCards, 6]]  # 6 = DYN_DUE constant
+    deck["terms"] = [[search, numberCards, defaultOrder]]
     col.decks.save(deck)
     col.sched.rebuildDyn(did)
     mw.progress.finish()
