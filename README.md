@@ -29,6 +29,7 @@ Configuration options can be found in the add-on config, accessible from Tools â
     * 6 for Order due (default)
     * 7 for Latest added first
     * 8 for Relative overdueness
+
 For more detail on what each of these orders mean, see the [Anki User Manual](https://docs.ankiweb.net/filtered-decks.html#order)
 
 As an example, here's what I use in my config:
