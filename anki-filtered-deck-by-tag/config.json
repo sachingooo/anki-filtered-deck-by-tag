@@ -3,5 +3,6 @@
 	"shortNames": [],
 	"numCards": 9999,
 	"unsuspendAutomatically": true,
-	"defaultOrder": 6
+	"defaultOrder": 6,
+	"tag-delims": "_|\.|-|,|\|"
 }

@@ -24,6 +24,7 @@ from aqt.gui_hooks import browser_sidebar_will_show_context_menu
 from anki.consts import DYN_OLDEST, DYN_RANDOM, DYN_SMALLINT, DYN_BIGINT, DYN_LAPSES, DYN_ADDED, DYN_DUE, DYN_REVADDED, DYN_DUEPRIORITY
 
 from typing import TYPE_CHECKING
+import re
 
 if TYPE_CHECKING:
     from aqt.browser import SidebarTreeView  # type: ignore
@@ -85,7 +86,7 @@ def _createFilteredDeck(item: SidebarItem, supplementalSearchText, shortName):
 
 def _formatDeckNameFromTag(tagName: str):
     # Make the deck name readable
-    pieces = tagName.split("_")
+    pieces = re.split(config["tag-delims"], tagName)
     if len(pieces) == 1:
         return tagName
     if pieces[0].isnumeric():
